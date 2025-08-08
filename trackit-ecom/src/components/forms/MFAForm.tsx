@@ -185,12 +185,13 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
         <CardFooter className="flex flex-col space-y-4">
           <Button
             type="submit"
-            className="w-full"
+            variant="primary"
+            size="lg"
             loading={loading}
             disabled={code.length !== 6 || loading}
             fullWidth
           >
-            Verify & Continue
+            Verify & Continue to Dashboard
           </Button>
 
           <Button

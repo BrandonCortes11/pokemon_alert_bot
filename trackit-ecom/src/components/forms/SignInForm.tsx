@@ -115,12 +115,13 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
         <CardFooter className="flex flex-col space-y-4">
           <Button
             type="submit"
-            className="w-full"
+            variant="primary"
+            size="lg"
             loading={loading}
             disabled={!email || !password || loading}
             fullWidth
           >
-            Sign In
+            Sign In to TrackIt Ecom
           </Button>
 
           <p className="text-center text-sm text-text-secondary">

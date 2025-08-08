@@ -185,12 +185,13 @@ export default function SignUpForm() {
         <CardFooter className="flex flex-col space-y-4">
           <Button
             type="submit"
-            className="w-full"
+            variant="primary"
+            size="lg"
             loading={loading}
             disabled={!formData.email || !formData.password || !formData.firstName || !formData.lastName || loading}
             fullWidth
           >
-            Create Account
+            Create My TrackIt Account
           </Button>
 
           <p className="text-center text-sm text-text-secondary">

@@ -27,7 +27,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-tertiary z-10">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-text-tertiary z-10 pointer-events-none">
               {icon}
             </div>
           )}
@@ -35,7 +35,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             id={inputId}
             className={cn(
-              'flex h-12 w-full rounded-lg border-2 bg-white px-4 py-3 text-base font-medium text-text-primary transition-all duration-200 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-text-tertiary placeholder:font-normal',
+              'flex h-12 w-full rounded-lg border-2 bg-white px-4 py-3 text-base font-medium text-text-primary transition-all duration-200 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-text-tertiary placeholder:font-normal relative z-20',
               'focus:outline-none focus:ring-2 focus:ring-primary-blue-medium focus:ring-offset-0 focus:border-primary-blue-medium',
               'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-neutral-gray-light',
               // Default border

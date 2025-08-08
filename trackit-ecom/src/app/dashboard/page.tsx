@@ -1,119 +1,103 @@
 'use client'
 
-import ProtectedRoute from '@/components/layout/ProtectedRoute'
-import { useAuth } from '@/contexts/AuthContext'
-import { Button } from '@/components/ui/Button'
+import DashboardLayout from '@/components/layout/DashboardLayout'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function DashboardPage() {
-  const { user, signOut } = useAuth()
-
-  const handleSignOut = async () => {
-    try {
-      await signOut()
-    } catch (error) {
-      console.error('Sign out error:', error)
-    }
-  }
+  const { user } = useAuth()
+  const firstName = user?.user_metadata?.first_name || 'there'
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <header className="bg-white border-b border-neutral-gray-medium">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <h1 className="h3 text-text-primary">TrackIt Ecom</h1>
+    <DashboardLayout
+      title={`Welcome back, ${firstName}!`}
+      description="Here's what's happening with your business today."
+    >
+      <div className="space-y-8">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Total Revenue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h2 text-accent-green">$0.00</div>
+              <p className="body-small text-text-secondary">No data yet</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Total Expenses</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h2 text-accent-red">$0.00</div>
+              <p className="body-small text-text-secondary">No data yet</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Net Profit</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h2 text-text-primary">$0.00</div>
+              <p className="body-small text-text-secondary">No data yet</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Getting Started */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Getting Started with TrackIt Ecom</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <p className="body-medium text-text-secondary">
+                Welcome to TrackIt Ecom! To get started with automated expense and profit tracking:
+              </p>
+              
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary-blue-medium text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  1
+                </div>
+                <div>
+                  <h4 className="font-semibold text-text-primary mb-1">Connect Your Social Media</h4>
+                  <p className="text-text-secondary text-sm">Link your Facebook, Instagram, and WhatsApp Business accounts to automatically track revenue and ad spending.</p>
+                </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <span className="body-medium text-text-secondary">
-                  Welcome, {user?.user_metadata?.first_name || user?.email}
-                </span>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
+              
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary-blue-medium text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  2
+                </div>
+                <div>
+                  <h4 className="font-semibold text-text-primary mb-1">Set Up Categories</h4>
+                  <p className="text-text-secondary text-sm">Organize your expenses and revenue streams with custom categories for better insights.</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-primary-blue-medium text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  3
+                </div>
+                <div>
+                  <h4 className="font-semibold text-text-primary mb-1">Start Tracking</h4>
+                  <p className="text-text-secondary text-sm">Begin automatically tracking your e-commerce financial data and generating insights.</p>
+                </div>
+              </div>
+              
+              <div className="pt-4">
+                <Button variant="primary" size="lg">
+                  Complete Setup Guide
                 </Button>
               </div>
             </div>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="mb-8">
-            <h2 className="h2 text-text-primary mb-2">Dashboard</h2>
-            <p className="body-large text-text-secondary">
-              Welcome to your TrackIt Ecom dashboard. Here you'll manage your financial data and integrations.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Quick Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Total Revenue</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h2 text-accent-green">$0.00</div>
-                <p className="body-small text-text-secondary">No data yet</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Total Expenses</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h2 text-accent-red">$0.00</div>
-                <p className="body-small text-text-secondary">No data yet</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Net Profit</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h2 text-text-primary">$0.00</div>
-                <p className="body-small text-text-secondary">No data yet</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Getting Started */}
-          <div className="mt-12">
-            <Card>
-              <CardHeader>
-                <CardTitle>Getting Started</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="body-medium text-text-secondary">
-                    Welcome to TrackIt Ecom! To get started with automated expense and profit tracking:
-                  </p>
-                  
-                  <ol className="space-y-2 body-medium text-text-secondary pl-4">
-                    <li>1. Create your first business profile</li>
-                    <li>2. Connect your social media accounts (Facebook, Instagram, WhatsApp)</li>
-                    <li>3. Set up your expense and revenue categories</li>
-                    <li>4. Start tracking your financial data automatically</li>
-                  </ol>
-                  
-                  <div className="pt-4">
-                    <Button variant="primary">
-                      Set Up Your Business
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
+          </CardContent>
+        </Card>
       </div>
-    </ProtectedRoute>
+    </DashboardLayout>
   )
 }
