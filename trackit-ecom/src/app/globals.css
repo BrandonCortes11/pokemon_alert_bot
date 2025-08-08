@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* Custom CSS Variables for TrackIt Ecom Design System */
+:root {
+  /* Primary Colors */
+  --color-primary-blue-dark: #2C3E50;
+  --color-primary-blue-medium: #3498DB;
+  --color-primary-blue-light: #ECF0F1;
+  
+  /* Neutral Colors */
+  --color-neutral-gray-dark: #7F8C8D;
+  --color-neutral-gray-medium: #BDC3C7;
+  --color-neutral-gray-light: #F2F4F7;
+  --color-background: #FFFFFF;
+  
+  /* Accent Colors */
+  --color-accent-green: #27AE60;
+  --color-accent-red: #E74C3C;
+  --color-accent-orange: #F39C12;
+  --color-accent-purple: #8E44AD;
+  
+  /* Semantic Colors */
+  --color-status-success: #27AE60;
+  --color-status-warning: #F39C12;
+  --color-status-error: #E74C3C;
+  --color-status-info: #3498DB;
+  
+  /* Text Colors */
+  --text-color-primary: #2C3E50;
+  --text-color-secondary: #7F8C8D;
+  --text-color-tertiary: #BDC3C7;
+  --text-color-inverted: #F2F4F7;
+  
+  /* Typography */
+  --font-size-h1: 36px;
+  --font-size-h2: 28px;
+  --font-size-h3: 22px;
+  --font-size-h4: 18px;
+  --font-size-body-large: 16px;
+  --font-size-body-medium: 14px;
+  --font-size-body-small: 12px;
+  --font-size-button: 16px;
+  --font-size-input: 16px;
+  
+  --line-height-heading: 1.2;
+  --line-height-body: 1.6;
+}
+
+/* Dark Mode Variables */
+.dark {
+  --color-background: #1A202C;
+  --color-card-background: #2D3748;
+  --text-color-primary: #F2F4F7;
+  --text-color-secondary: #BDC3C7;
+  --text-color-tertiary: #7F8C8D;
+  --text-color-inverted: #2C3E50;
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Inter', 'Roboto', 'Open Sans', sans-serif;
+  background-color: var(--color-background);
+  color: var(--text-color-secondary);
+  line-height: var(--line-height-body);
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Typography Classes */
+.h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-heading);
+  color: var(--text-color-primary);
+  font-weight: 700;
+}
+
+.h2 {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-heading);
+  color: var(--text-color-primary);
+  font-weight: 600;
+}
+
+.h3 {
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-heading);
+  color: var(--text-color-primary);
+  font-weight: 600;
+}
+
+.h4 {
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-heading);
+  color: var(--text-color-primary);
+  font-weight: 500;
+}
+
+.body-large {
+  font-size: var(--font-size-body-large);
+  line-height: var(--line-height-body);
+}
+
+.body-medium {
+  font-size: var(--font-size-body-medium);
+  line-height: var(--line-height-body);
+}
+
+.body-small {
+  font-size: var(--font-size-body-small);
+  line-height: var(--line-height-body);
+}
+
+/* Utility Classes */
+.btn {
+  font-size: var(--font-size-button);
+  line-height: var(--line-height-body);
+  font-weight: 500;
+}
+
+.input {
+  font-size: var(--font-size-input);
+  line-height: var(--line-height-body);
+}
