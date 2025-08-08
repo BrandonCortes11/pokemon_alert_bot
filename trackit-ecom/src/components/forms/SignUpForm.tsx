@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
+import { Alert } from '@/components/ui/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function SignUpForm() {
@@ -57,7 +58,7 @@ export default function SignUpForm() {
       if (result.message) {
         setSuccess(result.message)
       } else {
-        setSuccess('Account created successfully! You can now sign in.')
+        setSuccess('Account created successfully! Please check your email for verification instructions.')
       }
     } catch (err: any) {
       setError(err.message || 'Failed to create account')
@@ -69,15 +70,14 @@ export default function SignUpForm() {
   if (success) {
     return (
       <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle className="text-center text-accent-green">Account Created!</CardTitle>
-          <CardDescription className="text-center">
+        <CardContent className="pt-8">
+          <Alert variant="success" title="Account Created Successfully!">
             {success}
-          </CardDescription>
-        </CardHeader>
+          </Alert>
+        </CardContent>
         <CardFooter>
           <Link href="/auth/signin" className="w-full">
-            <Button className="w-full">
+            <Button className="w-full" variant="success">
               Continue to Sign In
             </Button>
           </Link>
@@ -96,11 +96,11 @@ export default function SignUpForm() {
       </CardHeader>
       
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {error && (
-            <div className="p-3 rounded-md bg-red-50 border border-accent-red">
-              <p className="text-sm text-accent-red">{error}</p>
-            </div>
+            <Alert variant="error" title="Account Creation Failed">
+              {error}
+            </Alert>
           )}
 
           <div className="grid grid-cols-2 gap-4">
@@ -187,7 +187,8 @@ export default function SignUpForm() {
             type="submit"
             className="w-full"
             loading={loading}
-            disabled={!formData.email || !formData.password || !formData.firstName || !formData.lastName}
+            disabled={!formData.email || !formData.password || !formData.firstName || !formData.lastName || loading}
+            fullWidth
           >
             Create Account
           </Button>

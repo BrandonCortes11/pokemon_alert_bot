@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
+import { Alert } from '@/components/ui/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface SignInFormProps {
@@ -17,6 +18,7 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const { signIn } = useAuth()
   const router = useRouter()
@@ -24,6 +26,7 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
     setLoading(true)
 
     try {
@@ -34,8 +37,8 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
           onMFARequired(result)
         }
       } else {
-        // Redirect to dashboard on successful login
-        router.push('/dashboard')
+        setSuccess('Successfully signed in! Redirecting...')
+        setTimeout(() => router.push('/dashboard'), 1000)
       }
     } catch (err: any) {
       setError(err.message || 'Failed to sign in')
@@ -54,11 +57,17 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
       </CardHeader>
       
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {error && (
-            <div className="p-3 rounded-md bg-red-50 border border-accent-red">
-              <p className="text-sm text-accent-red">{error}</p>
-            </div>
+            <Alert variant="error" title="Sign In Failed">
+              {error}
+            </Alert>
+          )}
+          
+          {success && (
+            <Alert variant="success" title="Success">
+              {success}
+            </Alert>
           )}
 
           <Input
@@ -108,7 +117,8 @@ export default function SignInForm({ onMFARequired }: SignInFormProps) {
             type="submit"
             className="w-full"
             loading={loading}
-            disabled={!email || !password}
+            disabled={!email || !password || loading}
+            fullWidth
           >
             Sign In
           </Button>

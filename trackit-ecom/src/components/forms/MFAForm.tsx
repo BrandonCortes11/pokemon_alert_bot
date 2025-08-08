@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/Card'
+import { Alert } from '@/components/ui/Alert'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface MFAFormProps {
@@ -16,6 +17,7 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
   const [code, setCode] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const [challengeId, setChallengeId] = useState('')
   const [selectedFactorId, setSelectedFactorId] = useState('')
 
@@ -48,6 +50,7 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
     setLoading(true)
 
     try {
@@ -58,8 +61,8 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
       })
 
       if (result) {
-        // MFA verification successful, redirect to dashboard
-        router.push('/dashboard')
+        setSuccess('Verification successful! Redirecting to dashboard...')
+        setTimeout(() => router.push('/dashboard'), 1000)
       }
     } catch (err: any) {
       setError(err.message || 'Invalid verification code')
@@ -92,11 +95,17 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
       </CardHeader>
       
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {error && (
-            <div className="p-3 rounded-md bg-red-50 border border-accent-red">
-              <p className="text-sm text-accent-red">{error}</p>
-            </div>
+            <Alert variant="error" title="Verification Failed">
+              {error}
+            </Alert>
+          )}
+          
+          {success && (
+            <Alert variant="success" title="Success">
+              {success}
+            </Alert>
           )}
 
           {/* Factor Selection */}
@@ -178,7 +187,8 @@ export default function MFAForm({ factors, onBack }: MFAFormProps) {
             type="submit"
             className="w-full"
             loading={loading}
-            disabled={code.length !== 6}
+            disabled={code.length !== 6 || loading}
+            fullWidth
           >
             Verify & Continue
           </Button>
