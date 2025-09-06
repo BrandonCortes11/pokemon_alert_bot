@@ -1,0 +1,220 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  phone         String?
+  password      String?   // For credentials auth, null for OAuth
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts       Account[]
+  sessions       Session[]
+  alerts         Alert[]
+  reports        CommunityReport[]
+  notifications  NotificationPreference[]
+
+  @@map("users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Store {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "pokemon_center"
+  displayName String // e.g., "Pokémon Center"
+  url         String
+  logoUrl     String?
+  isActive    Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  products Product[]
+  
+  @@map("stores")
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  sku         String?
+  url         String
+  imageUrl    String?
+  category    String
+  storeId     String
+  lastPrice   Float?
+  currentStock StockStatus @default(UNKNOWN)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  store       Store @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  alerts      Alert[]
+  stockChecks StockCheck[]
+  reports     CommunityReport[]
+
+  @@unique([sku, storeId])
+  @@map("products")
+}
+
+model Alert {
+  id             String   @id @default(cuid())
+  userId         String
+  productId      String
+  name           String
+  isActive       Boolean  @default(true)
+  lastTriggered  DateTime?
+  triggerCount   Int      @default(0)
+  
+  // Conditions
+  stockConditions StockStatus[]
+  priceThreshold  Float?
+  priceDirection  PriceDirection?
+  
+  // Notifications
+  emailNotify   Boolean @default(true)
+  smsNotify     Boolean @default(false)
+  pushNotify    Boolean @default(true)
+  webhookUrl    String?
+  discordWebhook String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("alerts")
+}
+
+model StockCheck {
+  id        String      @id @default(cuid())
+  productId String
+  status    StockStatus
+  price     Float?
+  quantity  Int?
+  metadata  Json?       // Additional store-specific data
+  timestamp DateTime    @default(now())
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("stock_checks")
+}
+
+model CommunityReport {
+  id         String     @id @default(cuid())
+  userId     String
+  productId  String
+  reportType ReportType
+  
+  // Report data
+  status StockStatus?
+  price  Float?
+  notes  String?
+  
+  verified  Boolean @default(false)
+  votes     Int     @default(0)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("community_reports")
+}
+
+model NotificationPreference {
+  id     String @id @default(cuid())
+  userId String
+
+  // Global notification settings
+  emailEnabled   Boolean @default(true)
+  smsEnabled     Boolean @default(false)
+  pushEnabled    Boolean @default(true)
+  
+  // Notification timing
+  quietHoursStart Int? // Hour in 24h format, e.g., 22 for 10 PM
+  quietHoursEnd   Int? // Hour in 24h format, e.g., 8 for 8 AM
+  timezone        String @default("UTC")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@map("notification_preferences")
+}
+
+// Enums
+enum StockStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+  LIMITED_STOCK
+  PREORDER
+  UNKNOWN
+}
+
+enum PriceDirection {
+  ABOVE
+  BELOW
+}
+
+enum ReportType {
+  STOCK
+  PRICE
+  ERROR
+}
